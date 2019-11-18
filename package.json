@@ -1,0 +1,30 @@
+{
+  "name": "line-works-bot-sample01-node-ibmcloud",
+  "main": "server.js",
+  "description": "Node.js on IBM Cloud で、初めての LINE WORKS チャットボット開発",
+  "version": "0.1.0",
+  "private": false,
+  "engines": {
+    "node": "10.*"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IBM-Cloud/get-started-node"
+  },
+  "dependencies": {
+    "@cloudant/cloudant": "^3.0.2",
+    "body-parser": "^1.17.x",
+    "cfenv": "^1.0.x",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.x",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "log4js": "^5.3.0",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0"
+  },
+  "author": "shotamaco"
+}
