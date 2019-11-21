@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const request = require("request");
+const request = require('request');
 const log4js = require('log4js')
 
 log4js.configure({
@@ -19,6 +19,7 @@ const logger = log4js.getLogger();
 logger.level = 'debug';
 
 // -- ハンズオン編集箇所１ -- start
+// 各IDやKEYは、直接記述するのではなくアプリケーションの環境変数から読み込むようにしてください。
 const API_ID = 'アプリケーションID';
 const CONSUMER_KEY = 'Server API Consumer Key';
 const SERVER_ID = 'Server ID';
@@ -29,16 +30,16 @@ const BOT_NO = 'BotNo';
 // デフォルトで http 3000ポートで受付
 var port = process.env.PORT || 3000
 app.listen(port, function() {
-    console.log("To view your app, open this link in your browser: http://localhost:" + port);
+    console.log('To view your app, open this link in your browser: http://localhost:' + port);
 });
 
 app.use(express.json({verify:(req, res, buf, encoding) => {
   // メッセージの改ざん防止
   const data = crypto.createHmac('sha256', API_ID).update(buf).digest('base64');
-  const signature = req.headers["x-works-signature"];
+  const signature = req.headers['x-works-signature'];
 
   if (data !== signature) {
-    logger.error(`NG`);
+    logger.error(`リクエストが改ざんされています！`);
     throw 'NOT_MATCHED signature';
   }
 }}));
@@ -46,15 +47,15 @@ app.use(express.json({verify:(req, res, buf, encoding) => {
 /* 
 * 疎通確認API
 */
-app.get("/", function (req, res) {
-  res.send("起動してます！");
+app.get('/', function (req, res) {
+  res.send('起動してます！');
   logger.info(`ログ`);
 });
 
 /**
  * LINE WORKS からのメッセージを受信するAPI
  */
-app.post("/callback", function (req, res) {
+app.post('/callback', function (req, res) {
   logger.info(`callback`);
   /*
    req.bodyに下記のJSON形式のデータが受診されます。
@@ -102,7 +103,7 @@ function createJWT(callbackFunc) {
   // JWTの有効期間は1時間
   const exp = iat + (60 * 60);　
   const cert = PRIVATE_KEY;
-  const jwtData = jwt.sign({"iss":iss, "iat":iat, "exp":exp}, cert, {algorithm:"RS256"}, (err, jwtData) => {
+  const jwtData = jwt.sign({ iss: iss, iat: iat, exp: exp }, cert, { algorithm: 'RS256' }, (err, jwtData) => {
     if (err) {
       console.log(err);
     } else {
@@ -122,13 +123,13 @@ function getServerTokenFromLineWorks(jwtData, callbackFunc) {
   // 本番稼働時は、取得したServerトークンを NoSQL データベース等に保持し、
   // 有効期限が過ぎた場合にのみ、再度 LINE WORKS から取得するように実装してください。
   const postdata = {
-    url: 'https://authapi.worksmobile.com/b/' + API_ID + '/server/token',
+    url: `https://authapi.worksmobile.com/b/${API_ID}/server/token`,
     headers : {
-        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     form: {
-        "grant_type" : encodeURIComponent("urn:ietf:params:oauth:grant-type:jwt-bearer"),
-        "assertion" : jwtData
+      grant_type: encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer'),
+      assertion: jwtData
     }
   };
 
@@ -155,17 +156,17 @@ function sendMessageToLineWorks(serverToken, accountId, roomId, reqMessage) {
 
   // 送信するJSONデータ
   let sendData = {
-    url: 'https://apis.worksmobile.com/' + API_ID + '/message/sendMessage/v2',
-    headers : {
-      'Content-Type' : 'application/json;charset=UTF-8',
-      'consumerKey' : CONSUMER_KEY,
-      'Authorization' : "Bearer " + serverToken
+    url: `https://apis.worksmobile.com/${API_ID}/message/sendMessage/v2`,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      consumerKey: CONSUMER_KEY,
+      Authorization: `Bearer ${serverToken}`
     },
     json: {
-      "botNo" : Number(BOT_NO),
-      "content" : {
-        "type" : "text",
-        "text" : resMessage
+      botNo: Number(BOT_NO),
+      content: {
+        type: 'text',
+        text: resMessage
       }
     }
   };
@@ -197,11 +198,11 @@ function botImpl(reqMessage) {
   // -- ハンズオン編集箇所2 -- start
   // ※リクエストメッセージを元に条件分岐をしたり、他システムからデータを取得してレスポンスメッセージを決定します。
   /*
-  if (reqMessage.indexOf("botくん") >= 0) {
-    return "はい";
+  if (reqMessage.indexOf('botくん') >= 0) {
+    return 'はい';
   }
-  if (reqMessage.indexOf("名前") >= 0) {
-    return "初めての LINE WORKS Botです";
+  if (reqMessage.indexOf('名前') >= 0) {
+    return '初めての LINE WORKS Botです';
   }
   */
   // -- ハンズオン編集箇所2 -- end
