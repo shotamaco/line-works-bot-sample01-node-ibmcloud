@@ -19,7 +19,6 @@ const logger = log4js.getLogger();
 logger.level = 'debug';
 
 // -- ハンズオン編集箇所１ -- start
-// 各IDやKEYは、直接記述するのではなくアプリケーションの環境変数から読み込むようにしてください。
 const API_ID = 'アプリケーションID';
 const CONSUMER_KEY = 'Server API Consumer Key';
 const SERVER_ID = 'Server ID';
@@ -69,7 +68,7 @@ app.post('/callback', function (req, res) {
      "createdTime": <作成日時>,
      "content": {
        "type": "text",
-       "text": "<受信したチャットのテキストデータ>""
+       "text": "<受信したチャットのテキストデータ>"
      }
    }
    ---------

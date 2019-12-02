@@ -1,7 +1,7 @@
 {
   "name": "line-works-bot-sample01-node-ibmcloud",
   "main": "server.js",
-  "description": "Node.js on IBM Cloud で、LINE WORKS トークBotサーバー構築",
+  "description": "LINE WORKS BotをIBM Cloud上に構築",
   "version": "0.1.0",
   "private": false,
   "engines": {
