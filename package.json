@@ -19,7 +19,7 @@
     "cfenv": "^1.0.x",
     "crypto": "^1.0.1",
     "dotenv": "^4.0.0",
-    "express": "^4.15.x",
+    "express": "^4.17.x",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^5.3.0",
